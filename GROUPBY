@@ -1,0 +1,192 @@
+/************************************************ GROUP BY ********************************************************\
+-> GROUP BY will allow us to aggregate data and apply functions to better understand how data is distributed
+per category.*/ 
+/*********************************************** Aggregate Functions ***********************************************\
+-> SQL provides a variety of aggregate functions.
+-> The main idea behind an aggregate function is to take multiple inputs and return a single output.
+Most common aggregate functions:
+    AVG() - Returns average value
+    COUNT() - Returns number of values
+    MAX() - Returns maximum value
+    MIN() - Returns minimum value
+    SUM() - Returns the sum of all values
+
+
+-> Aggregate function calls happen only in the SELECT clause or the HAVING clause.
+Special Notes:
+    -> AVG() returns a floating point value many decimal places(e.g. 2.342418...)
+        -> We can use ROUND() to specify precision after the decimal
+    -> COUNT() simply returns the number of rows, which means by convention we just use COUNT(*)
+*/
+
+SELECT * FROM film;
+
+-- How to find minimum replacement_cost ?
+SELECT MIN(replacement_cost) FROM film;
+
+-- How to find maximum replacement_cost ?
+SELECT MAX(replacement_cost) FROM film;
+
+SELECT MIN(replacement_cost),MAX(replacement_cost) FROM film;
+
+SELECT AVG(replacement_cost) FROM film; -- 19.9840000000000000
+
+SELECT ROUND(AVG(replacement_cost),2) FROM film; --19.98
+
+SELECT SUM(replacement_cost) FROM film;
+
+/*********************************************** GROUP BY ***********************************************\
+Category   Data Value
+A          10
+A          5
+B          2
+B          4
+C          12  
+C          6
+
+-> We need to choose a categorical column to GROUP BY
+-> Categorical columns are non-continuous
+-> Keep in mind, they can still be numerical, such as cabin class categories on a ship(e.g Class 1,Class 2, Class 3)
+
+      Category-1                Category-2          Category-3            Aggregate(SUM)       Aggregate(AVG)  Aggregate(COUNT)
+Category   Data Value   Category   Data Value   Category   Data Value   Category   Result  Category   Result    Category   Result
+A          10           B          2            C          12           A          17       A          5.6      A           2
+A          5            B          4            C           6           B          7        B          2.3      B           2
+A          2            B          1            C           2           C          20       C          6.6      C           2
+
+General Syntax :
+        SELECT category_col,AVG(data_col) 
+        FROM table 
+        GROUP BY category_col;
+    
+-> The GROUP BY clause must appear right after a FROM or WHERE statement.
+        SELECT category_col,AVG(data_col) 
+        FROM table
+        WHERE category_col != 'A'
+        GROUP BY category_col;
+        
+-> In the SELECT statement,columns must either have an aggregate function or be in the GROUP BY clause.
+        SELECT company,division,SUM(sales) 
+        FROM finance_table 
+        GROUP BY company,division 
+        
+-> WHERE statements shoud not refer to the aggregation result,later on we will learn to use HAVING TO filter on thoser results
+        SELECT company,division,SUM(sales) 
+        FROM finance_table
+        WHERE division IN('marketing','transport')
+        GROUP BY company,division
+
+-> If you want to sort results based on the aggregate, make sure to reference the entire function
+        SELECT company,SUM(sales) 
+        FROM finance_table
+        GROUP BY company
+        ORDER BY SUM(sales)
+        LIMT 5
+*/
+
+SELECT * FROM payment;
+
+SELECT customer_id,SUM(amount) 
+FROM payment
+GROUP BY customer_id
+ORDER BY customer_id
+
+
+-- What customer id is spending the most amount of money?
+SELECT customer_id,SUM(amount) 
+FROM payment
+GROUP BY customer_id
+ORDER BY SUM(amount) DESC
+
+SELECT customer_id,staff_id,SUM(amount) 
+FROM payment
+GROUP BY customer_id,staff_id
+ORDER BY SUM(amount) DESC
+
+SELECT customer_id,staff_id,SUM(amount) 
+FROM payment
+GROUP BY customer_id,staff_id
+ORDER BY customer_id
+
+
+SELECT * FROM payment;
+
+SELECT DATE(payment_date), SUM(amount) FROM payment
+GROUP BY DATE(payment_date)
+ORDER BY SUM(amount) DESC
+
+/********************************* GROUP BY CHALLENGES ***********************************************\
+Challenge Task-1:
+-> We have two staff members, with Staff IDs 1 and 2. We want to give a bonus to the staff member that handled the most
+payments.(Most in terms of number of payments processed, not total dollar amount)
+-> How many payments did each staff member handle and who gets the bonus?
+*/
+
+SELECT * FROM payment;
+
+SELECT staff_id,COUNT(amount) FROM payment
+GROUP BY staff_id
+ORDER BY staff_id
+
+/*
+Challenge Task-2:
+-> Corporate HQ is conducting a study on the relationship between replacement cost and a movie 
+MPAA rating(e.g. G,PG,R, etc...)
+-> What is the average replacement cost per MPAA rating?    
+*/
+
+SELECT * FROM film;
+SELECT rating,AVG(replacement_cost)
+FROM film
+GROUP BY rating
+ORDER BY rating
+
+-- Note: You may need to expand the AVG column to view correct results
+SELECT * FROM film;
+SELECT rating,ROUND(AVG(replacement_cost),2)
+FROM film
+GROUP BY rating
+ORDER BY rating
+
+
+
+/*
+Challenge Task-3:
+-> We are running a promotion to reward our top 5 customers with coupons.
+-> What are the customer ids of the top 5 customers by total spend?
+*/
+SELECT * FROM payment;
+
+SELECT customer_id,SUM(amount)
+FROM payment
+GROUP BY customer_id
+ORDER BY SUM(amount) DESC
+LIMIT 5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        
+
+
+
+
+
+
+
+
+
+

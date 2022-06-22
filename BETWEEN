@@ -1,0 +1,45 @@
+/************************************************ BETWEEN ********************************************************\
+-> The BETWEEN operator can be used to match a value against a range of values:
+-> value >= low AND value <= high
+-> value BETWEEN low AND high
+    For Example, 
+        If we want value BETWEEN 8 AND 9. Here 8 and 9 are inclusive
+
+-> The NOT BETWEEN operator is same as:
+-> value < low OR value > high
+-> value NOT BETWEEN low AND high
+    For Example, 
+        If we want value NOT BETWEEN 8 AND 9. Here 8 and 9 are NOT inclusive.
+        
+-> The BETWEEN operator can also be used with dates. Note that you need to format dates in the ISO 8601 standard format
+which is YYYY-MM-DD
+    -> date BETWEEN '2007-01-01' AND '2007-02-01'
+    
+-> When using BETWEEN operator with dates that also include timestamp information, pay careful attention to using
+BETWEEN versus <=,>= comparison operators,due to the fact that a datetime starts at 0:00
+-> Later on we will study more specific methods for datetime information types
+*/
+
+
+SELECT * FROM payment -- 14596
+SELECT * FROM payment LIMIT 2;
+
+-- How to find the no of payments donw between 8 and 9 dollors
+SELECT * FROM payment WHERE amount BETWEEN 8 AND 9;
+SELECT COUNT(*) FROM payment WHERE amount BETWEEN 8 AND 9;--439
+SELECT COUNT(*) FROM payment WHERE amount NOT BETWEEN 8 AND 9; --14157
+
+SELECT * FROM payment WHERE payment_date BETWEEN '2007-02-01' AND '2007-02-14'; --0
+-- While working with datetime column in conjuction with BETWEEN we need to considre the time as well. 
+-- The above query wont return the results upto 2007-02-14 0:00 hrs. We need to use the below query to include
+-- the details which has 2007-02-14 23:25:11.996577 etc...
+
+SELECT * FROM payment WHERE payment_date BETWEEN '2007-02-01' AND '2007-02-15'; --27
+
+        
+
+
+
+
+
+
