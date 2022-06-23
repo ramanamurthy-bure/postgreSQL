@@ -1,0 +1,131 @@
+/************************************WHERE*************************************************************************\
+
+-> SELECT and WHERE are the most fundamental SQL statements and you will find yourself using them often!
+-> The WHERE statement allows us to specify conditions on columns for the rows to be returned
+Basic Syntax:
+        SELECT column1,column2
+        FROM table
+        WHERE conditions;
+        
+-> The WHERE clause appears immediately after the FROM clause of the SELECT statement
+-> The conditions are used to filter the rows returned from the SELECT statement
+-> PostgreSQL provides a variety of standard operators to construct the conditions
+
+Comparison Operators:
+    -> Compare a column value to something:
+    -> Is the price greater than $3.00?
+    -> Is the pet's name equal to 'Sam'?
+    
+    Operator            Description
+        =               Equal
+        >               Greater than
+        <               Less than
+        >=              Greater than or equal to
+        <=              Less than or equal to
+        <> or !=        Not equal to
+        
+Logical Operators:  
+-> Allow us to combine multiple comparison operators
+        -> AND
+        -> OR
+        -> NOT
+        
+-> color_table:
+            first_name        choice
+            Zach              Green
+            David             Green
+            Claire            Yellow
+            David             Red
+      
+-> To get the both columns from the color_table
+    -> SELECT first_name,choice FROM color_table
+-> Now let's get only the people named David
+    -> SELECT * FROM color_table WHERE first_name='David';
+    -> SELECT first_name,choice FROM color_table WHERE first_name='David';
+    -> SELECT first_name,choice FROM color_table WHERE first_name='David' AND choice='Red';
+*/
+
+SELECT * FROM customer;
+
+-- To fetch all the records with the customer firstname as 'Jared'
+SELECT * FROM customer WHERE first_name='Jared';
+
+SELECT * FROM film;
+
+-- To fetch all the rows where the rental rate is greater than 4
+SELECT * FROM film WHERE rental_rate > 4;
+
+SELECT * FROM film WHERE rental_rate > 4 AND replacement_cost >= 19.99 AND rating='R';
+
+--> Equal(=) Operator
+SELECT title FROM film WHERE rental_rate > 4 AND replacement_cost >= 19.99 AND rating='R';
+
+--> AND Operator
+SELECT COUNT(title) FROM film WHERE rental_rate > 4 AND replacement_cost >= 19.99 AND rating='R'; --34
+SELECT COUNT(*) FROM film WHERE rental_rate > 4 AND replacement_cost >= 19.99 AND rating='R'; --34
+
+-->  OR Operator
+SELECT COUNT(*) FROM film WHERE rating='R' OR rating='PG-13'; --418
+
+-->  Not equal(!=) Operator
+SELECT * FROM film WHERE rating != 'R'; --805
+
+--> One last thing to keep in mind is that as we continue to learn more about SQL, you will soon realize there usually
+-- many different ways to arrive at the same solution
+
+--> Verify your work mainly against the expected results instead of our SQL solution
+/*
+# Challenge #1:
+-> A Customer forgot their wallet at our store!. We need to track down their email to inform them.
+-> What is the email for the customer with the name Nancy Thomas?
+*/
+
+SELECT * FROM customer;
+SELECT email FROM customer WHERE first_name='Nancy' AND last_name='Thomas';
+
+/*
+# Challenge #2:
+-> A Customer wants to know what the movie 'Outlaw Hanky' is about.
+-> Could you give them the description for the movie 'Outlaw Hanky'?
+*/
+
+SELECT * FROM film;
+SELECT description FROM film WHERE title = 'Outlaw Hanky';
+
+/*
+# Challenge #3:
+-> A Customer is late on their movie return, and we've mailed them a letter to their address at
+'259 lpoh Drive'. We should also call them on the phone to let them know
+-> Can you get the phone number for the customer who lives at '259 lpoh Drive'?
+*/
+
+SELECT * FROM address;
+SELECT phone FROM address WHERE address ='259 Ipoh Drive';
+
+
+
+
+
+
+
+
+
+        
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+ 
+
+
+
+
+
+

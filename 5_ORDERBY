@@ -1,0 +1,70 @@
+/************************************************ ORDER BY ********************************************************\
+-> You may have noticed PostgreSQL sometimes returns the same request query results in a different order
+-> You can use ORDER BY to sort rows based on a column value, in either ascending or descending order
+Basic Synax for Order BY :
+SELECT column_1,column_2 FROM table ORDER BY column_1 ASC/DESC
+-> Use ASC to sort in ascending order
+-> Use DESC to sort in descending order
+-> If you leave it blank, ORDER BY uses ASC by default
+-> You can also ORDER BY multiple columns
+-> This makes sense when one column has duplicate entries
+company_slaes_table:
+        Company                 Name                Sales
+        Apple                   Andrew              100
+        Google                  David               500
+        Apple                   Zach                300
+        Google                  Claire              200
+        Xerox                   Steven              100
+        
+
+SElECT Company,Name,Sales FROM table ORDER BY Company,Sales
+Output:
+        Company                 Name                Sales
+        Apple                   Andrew              100
+        Apple                   Zach                300
+        Google                  Claire              200
+        Google                  David               500        
+        Xerox                   Steven              100
+        
+        
+*/
+
+SELECT * FROM customer;
+
+-- Below 2 statements give same results as ORDER BY acending is default
+SELECT * FROM customer ORDER BY first_name;  
+SELECT * FROM customer ORDER BY first_name ASC; 
+
+-- Here the results will be ORDER BY descending order of the first_name
+SELECT * FROM customer ORDER BY first_name DESC;  
+
+--To ORDER one clolumn in DESC and one column in ASC
+SELECT store_id,first_name,last_name FROM customer 
+ORDER BY store_id DESC,first_name ASC;  
+
+
+
+
+
+
+
+
+
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+ 
+
+
+
+
+
+
